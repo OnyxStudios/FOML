@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "fomltest",
+  "version": "1.0.0",
+  "name": "FOMLTest",
+  "description": "FOML Test Mod",
+  "authors": [
+    "abused_master"
+  ],
+  "contact": {
+    "homepage": "https://minecraft.curseforge.com/projects/FOML",
+    "sources": "https://github.com/NerdHubMC/FOML"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "nerdhub.fomltest.FOMLTest"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  }
+}

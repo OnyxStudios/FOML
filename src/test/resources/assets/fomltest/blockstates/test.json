@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "fomltest:block/brick.obj" }
+    }
+}

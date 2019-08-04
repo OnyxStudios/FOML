@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "foml",
+  "version": "1.0.0",
+  "name": "FOML",
+  "description": "Fabric OBJ Model Loader",
+  "authors": [
+    "abused_master"
+  ],
+  "contact": {
+    "homepage": "https://minecraft.curseforge.com/projects/FOML",
+    "sources": "https://github.com/NerdHubMC/FOML"
+  },
+  "license": "MIT",
+  "icon": "assets/foml/icon.png",
+  "environment": "*",
+  "mixins": [
+    "foml.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "custom": {
+    "modmenu:api": true
+  }
+}
