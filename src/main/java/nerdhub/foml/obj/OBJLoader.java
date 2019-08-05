@@ -2,19 +2,25 @@ package nerdhub.foml.obj;
 
 import de.javagl.obj.*;
 import nerdhub.foml.FOML;
-import nerdhub.foml.obj.baked.OBJBakedModel;
+import nerdhub.foml.obj.baked.OBJUnbakedModel;
+import net.fabricmc.fabric.api.client.model.ModelProviderContext;
+import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
-public class OBJLoader {
+public class OBJLoader implements ModelResourceProvider, Function<ResourceManager, ModelResourceProvider> {
 
     public static final OBJLoader INSTANCE = new OBJLoader();
     private Set<String> objHandlers = new HashSet<>();
@@ -31,7 +37,7 @@ public class OBJLoader {
         return objHandlers.contains(modid);
     }
 
-    public OBJBakedModel loadModel(Reader reader, String modid, ResourceManager manager) {
+    public OBJBuilder loadModel(Reader reader, String modid, ResourceManager manager) {
         OBJBuilder model;
         try {
             Obj obj = ObjUtils.convertToRenderable(ObjReader.read(reader));
@@ -41,7 +47,7 @@ public class OBJLoader {
             return null;
         }
 
-        return model.build();
+        return model;
     }
 
     public List<Mtl> loadMTL(ResourceManager manager, String modid, List<String> mtlNames) throws IOException {
@@ -58,5 +64,26 @@ public class OBJLoader {
         }
 
         return mtls;
+    }
+
+    @Override
+    public UnbakedModel loadModelResource(Identifier identifier, ModelProviderContext modelProviderContext) {
+        if(OBJLoader.INSTANCE.isRegistered(identifier.getNamespace()) && identifier.getPath().endsWith(".obj")) {
+            ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
+
+            try (Reader reader = new InputStreamReader(resourceManager.getResource(new Identifier(identifier.getNamespace(), "models/" + identifier.getPath())).getInputStream())) {
+                OBJBuilder model = OBJLoader.INSTANCE.loadModel(reader, identifier.getNamespace(), resourceManager);
+                return new OBJUnbakedModel(model);
+            } catch (IOException e) {
+                FOML.LOGGER.error("Unable to load OBJ Model, Source: " + identifier.toString(), e);
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public ModelResourceProvider apply(ResourceManager manager) {
+        return this;
     }
 }

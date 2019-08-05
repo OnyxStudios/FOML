@@ -4,9 +4,10 @@ import de.javagl.obj.FloatTuple;
 import de.javagl.obj.Mtl;
 import de.javagl.obj.Obj;
 import de.javagl.obj.ObjSplitting;
-import nerdhub.foml.obj.baked.OBJBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
+import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Sprite;
@@ -18,22 +19,22 @@ import java.util.Map;
 
 public class OBJBuilder {
 
+    public static final Sprite DEFAULT_SPRITE = MinecraftClient.getInstance().getSpriteAtlas().getSprite(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
+
     private MeshBuilder meshBuilder;
     private QuadEmitter quadEmitter;
 
     private final Obj obj;
     private final List<Mtl> mtlList;
-    private Sprite sprite;
 
     public OBJBuilder(Obj obj, List<Mtl> mtlList) {
         meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
         quadEmitter = meshBuilder.getEmitter();
         this.obj = obj;
         this.mtlList = mtlList;
-        this.sprite = MinecraftClient.getInstance().getSpriteAtlas().getSprite(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
     }
 
-    public OBJBakedModel build() {
+    public Mesh build() {
         Map<String, Obj> materialGroups = ObjSplitting.splitByMaterialGroups(obj);
 
         for (Map.Entry<String, Obj> entry : materialGroups.entrySet()) {
@@ -44,18 +45,12 @@ public class OBJBuilder {
             Mtl mtl = findMtlForName(matName);
             FloatTuple diffuseColor = null;
             FloatTuple specularColor = null;
-            Sprite mtlSprite;
+            Sprite mtlSprite = DEFAULT_SPRITE;
 
             if(mtl != null) {
                 diffuseColor = mtl.getKd();
                 specularColor = mtl.getKs();
-                //try {
-                //TODO REGISTER RESOURCES FROM MTL WHEN LOADING THE MODEL
-                //MinecraftClient.getInstance().getSpriteAtlas().getSprite(new Identifier(mtl.getMapKd()));
-                //mtlSprite = manager.containsResource(new Identifier(mtl.getMapKd())) ? manager.getResource(new Identifier(mtl.getMapKd())) : sprite;
-                //} catch (IOException e) {
-                //    e.printStackTrace();
-                //}
+                mtlSprite = getMtlSprite(mtl.getMapKd());
             }
 
             for (int i = 0; i < matGroupObj.getNumFaces(); i++) {
@@ -72,9 +67,14 @@ public class OBJBuilder {
 
                     if(obj.getNumTexCoords() > 0) {
                         FloatTuple text = matGroupObj.getTexCoord(matGroupObj.getFace(i).getTexCoordIndex(v));
+
+                        quadEmitter.spriteColor(0, -1, -1, -1, -1);
                         quadEmitter.sprite(v, 0, text.getX(), text.getY());
-                        quadEmitter.spriteBake(0, sprite, quadEmitter.BAKE_ROTATE_NONE);
-                        quadEmitter.spriteColor(0, 1, 1, 1, 1);
+                        quadEmitter.colorIndex(0);
+                        quadEmitter.spriteUnitSquare(0);
+                        quadEmitter.spriteBake(0, mtlSprite, MutableQuadView.BAKE_NORMALIZED);
+                        quadEmitter.material(RendererAccess.INSTANCE.getRenderer().materialFinder().find());
+
                     }else {
                         quadEmitter.nominalFace(Direction.getFacing(normal.getX(), normal.getY(), normal.getZ()));
                     }
@@ -86,13 +86,15 @@ public class OBJBuilder {
                     quadEmitter.normal(v + 2, normal.getX(), normal.getY(), normal.getZ());
                 }
 
-
-
                 quadEmitter.emit();
             }
         }
 
-        return new OBJBakedModel(meshBuilder.build(), sprite);
+        return meshBuilder.build();
+    }
+
+    public List<Mtl> getMtlList() {
+        return mtlList;
     }
 
     public Mtl findMtlForName(String name) {
@@ -103,5 +105,9 @@ public class OBJBuilder {
         }
 
         return null;
+    }
+
+    public Sprite getMtlSprite(String name) {
+        return MinecraftClient.getInstance().getSpriteAtlas().getSprite(name);
     }
 }

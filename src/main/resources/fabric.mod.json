@@ -14,9 +14,11 @@
   "license": "MIT",
   "icon": "assets/foml/icon.png",
   "environment": "*",
-  "mixins": [
-    "foml.mixins.json"
-  ],
+  "entrypoints": {
+    "client": [
+      "nerdhub.foml.FOML"
+    ]
+  },
   "depends": {
     "fabricloader": ">=0.4.0",
     "fabric": "*"

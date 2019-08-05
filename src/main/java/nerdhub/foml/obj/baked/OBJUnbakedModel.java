@@ -1,7 +1,6 @@
 package nerdhub.foml.obj.baked;
 
-import com.google.common.collect.ImmutableSet;
-import com.sun.istack.internal.Nullable;
+import nerdhub.foml.obj.OBJBuilder;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;
@@ -9,17 +8,15 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.util.Identifier;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class OBJUnbakedModel implements UnbakedModel {
 
-    private OBJBakedModel model;
+    private OBJBuilder builder;
 
-    public OBJUnbakedModel(OBJBakedModel model) {
-        this.model = model;
+    public OBJUnbakedModel(OBJBuilder builder) {
+        this.builder = builder;
     }
 
     @Override
@@ -29,12 +26,14 @@ public class OBJUnbakedModel implements UnbakedModel {
 
     @Override
     public Collection<Identifier> getTextureDependencies(Function<Identifier, UnbakedModel> var1, Set<String> var2) {
-        return ImmutableSet.of(model.getSprite().getId());
+        List<Identifier> sprites = new ArrayList<>();
+        builder.getMtlList().forEach(mtl -> sprites.add(new Identifier(mtl.getMapKd())));
+
+        return sprites;
     }
 
-    @Nullable
     @Override
     public BakedModel bake(ModelLoader var1, Function<Identifier, Sprite> var2, ModelBakeSettings var3) {
-        return model;
+        return new OBJBakedModel(builder);
     }
 }
