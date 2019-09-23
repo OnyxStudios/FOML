@@ -62,3 +62,49 @@ map_Kd MODID:blocks/test
 ```
 
 And that's basically it, your block show now render your OBJ model! **(Note: It is recommended to scale the model before exporting it due to the size it will be rendered as)**
+
+
+### Using OBJ models for items
+
+Creating items using OBJ models is somewhat different. Firstly, the item model itself must be a `.obj-json` file, formatted as JSON, placed within the models/ path.
+
+The structure of this item model is similar to that of vanilla JSON model files, except that the parent points to a OBJ model like so:
+
+```
+// Example .obj-json file
+
+{
+    "parent": "MODID:item/test.obj",
+    "display": {
+        "head": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "firstperson_righthand": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "firstperson_lefthand": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "gui": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "fixed": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        }
+    }
+}
+```
+Note that the parent of a `.obj-json` model must be a OBJ model, and normal `.json` models can not
+use a `.obj-json` model as its parent.
+
+So far, only vanilla model transformations are supported using this model format.
