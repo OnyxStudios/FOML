@@ -55,6 +55,12 @@ public class OBJLoader implements ModelResourceProvider, Function<ResourceManage
 
         for (String name : mtlNames) {
             Identifier resourceId = new Identifier(modid, "models/" + name);
+            // Use 1.0.0 MTL path as a fallback
+            if (!manager.containsResource(resourceId)) {
+                resourceId = new Identifier(modid, "models/block" + name);
+            }
+
+            // Continue with normal resource loading code
             if(manager.containsResource(resourceId)) {
                 Resource resource = manager.getResource(resourceId);
                 mtls.addAll(MtlReader.read(resource.getInputStream()));
