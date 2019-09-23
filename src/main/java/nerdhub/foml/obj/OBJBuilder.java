@@ -13,6 +13,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,24 @@ public class OBJBuilder {
         quadEmitter = meshBuilder.getEmitter();
         this.obj = obj;
         this.mtlList = mtlList;
+    }
+
+    private void addVertex (int faceIndex, int vertIndex, FloatTuple vertex, FloatTuple normal, QuadEmitter emitter,
+                            Sprite mtlSprite, Obj matGroup, boolean degenerate) {
+        int textureCoordIndex = vertIndex;
+        if (degenerate)
+            textureCoordIndex --;
+
+        quadEmitter.pos   (vertIndex, vertex.getX(), vertex.getY(), vertex.getZ());
+        quadEmitter.normal(vertIndex, normal.getX(), normal.getY(), normal.getZ());
+
+        if(obj.getNumTexCoords() > 0) {
+            FloatTuple text = matGroup.getTexCoord(matGroup.getFace(faceIndex).getTexCoordIndex(textureCoordIndex));
+
+            quadEmitter.sprite(vertIndex, 0, text.getX(), text.getY());
+        }else {
+            quadEmitter.nominalFace(Direction.getFacing(normal.getX(), normal.getY(), normal.getZ()));
+        }
     }
 
     public Mesh build() {
@@ -54,7 +73,6 @@ public class OBJBuilder {
             }
 
             for (int i = 0; i < matGroupObj.getNumFaces(); i++) {
-
                 FloatTuple vertex = null;
                 FloatTuple normal = null;
                 int v;
@@ -62,29 +80,18 @@ public class OBJBuilder {
                     vertex = matGroupObj.getVertex(matGroupObj.getFace(i).getVertexIndex(v));
                     normal = matGroupObj.getNormal(matGroupObj.getFace(i).getNormalIndex(v));
 
-                    quadEmitter.pos(v, vertex.getX(), vertex.getY(), vertex.getZ());
-                    quadEmitter.normal(v + 1, normal.getX(), normal.getY(), normal.getZ());
-
-                    if(obj.getNumTexCoords() > 0) {
-                        FloatTuple text = matGroupObj.getTexCoord(matGroupObj.getFace(i).getTexCoordIndex(v));
-
-                        quadEmitter.spriteColor(0, -1, -1, -1, -1);
-                        quadEmitter.sprite(v, 0, text.getX(), text.getY());
-                        quadEmitter.colorIndex(0);
-                        quadEmitter.spriteUnitSquare(0);
-                        quadEmitter.spriteBake(0, mtlSprite, MutableQuadView.BAKE_NORMALIZED);
-                        quadEmitter.material(RendererAccess.INSTANCE.getRenderer().materialFinder().find());
-
-                    }else {
-                        quadEmitter.nominalFace(Direction.getFacing(normal.getX(), normal.getY(), normal.getZ()));
-                    }
-                    quadEmitter.colorIndex(1);
+                    addVertex (i, v, vertex, normal, quadEmitter, mtlSprite, matGroupObj, false);
                 }
 
-                if(vertex != null && normal != null) {
-                    quadEmitter.pos(v + 1, vertex.getX(), vertex.getY(), vertex.getZ());
-                    quadEmitter.normal(v + 2, normal.getX(), normal.getY(), normal.getZ());
+                // Special conversion of triangles to quads: re-add third vertex as the fourth vertex
+                if (matGroupObj.getFace(i).getNumVertices() == 3) {
+                    addVertex (i, 3, vertex, normal, quadEmitter, mtlSprite, matGroupObj, true);
                 }
+
+                quadEmitter.spriteColor(0, -1, -1, -1, -1);
+                quadEmitter.material(RendererAccess.INSTANCE.getRenderer().materialFinder().find());
+                quadEmitter.colorIndex(1);
+                quadEmitter.spriteBake(0, mtlSprite, MutableQuadView.BAKE_NORMALIZED);
 
                 quadEmitter.emit();
             }
