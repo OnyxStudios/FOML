@@ -57,7 +57,7 @@ public class OBJLoader implements ModelResourceProvider, Function<ResourceManage
             Identifier resourceId = new Identifier(modid, "models/" + name);
             // Use 1.0.0 MTL path as a fallback
             if (!manager.containsResource(resourceId)) {
-                resourceId = new Identifier(modid, "models/block" + name);
+                resourceId = new Identifier(modid, "models/block/" + name);
             }
 
             // Continue with normal resource loading code
