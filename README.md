@@ -66,13 +66,9 @@ And that's basically it, your block show now render your OBJ model! **(Note: It 
 
 ### Using OBJ models for items
 
-Creating items using OBJ models is somewhat different. Firstly, the item model itself must be a `.obj-json` file, formatted as JSON, placed within the models/ path.
-
-The structure of this item model is similar to that of vanilla JSON model files, except that the parent points to a OBJ model like so:
+JSON-formatted vanilla item models placed in the `models/item` folder can also specify your OBJ model as its "parent" model, similar to blockstates:
 
 ```
-// Example .obj-json file
-
 {
     "parent": "MODID:item/test.obj",
     "display": {
@@ -104,7 +100,6 @@ The structure of this item model is similar to that of vanilla JSON model files,
     }
 }
 ```
-Note that the parent of a `.obj-json` model must be a OBJ model, and normal `.json` models can not
-use a `.obj-json` model as its parent.
+And your item should now render the OBJ model with the proper transformations specified in its model file.
 
-So far, only vanilla model transformations are supported using this model format.
+So far, only vanilla model transformations are supported by FOML.
