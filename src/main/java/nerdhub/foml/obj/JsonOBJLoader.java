@@ -8,10 +8,12 @@ import nerdhub.foml.obj.baked.OBJUnbakedModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
+import net.fabricmc.fabric.api.client.model.ModelVariantProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.render.model.json.Transformation;
+import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
@@ -20,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.function.Function;
 
 /***
  *  JsonOBJLoader
@@ -27,27 +30,28 @@ import java.io.Reader;
  *
  *  Created by jard at 2:27 AM on September 22, 2019.
  ***/
-public class JsonOBJLoader extends OBJLoader {
-    public static final JsonOBJLoader INSTANCE = new JsonOBJLoader();
+public class JsonOBJLoader implements ModelVariantProvider, Function<ResourceManager, ModelVariantProvider> {
+    public static JsonOBJLoader INSTANCE = new JsonOBJLoader ();
     public static final Gson GSON = (new GsonBuilder())
-            .registerTypeAdapter (ModelTransformation.class, new ModelTransformDeserializer ())
-            .registerTypeAdapter (Transformation.class, new TransformDeserializer ())
+            .registerTypeAdapter (ModelTransformation.class, new JsonOBJLoader.ModelTransformDeserializer())
+            .registerTypeAdapter (Transformation.class, new JsonOBJLoader.TransformDeserializer())
             .create ();
+    private static final OBJLoader OBJ_LOADER = OBJLoader.INSTANCE;
 
     @Override
-    public UnbakedModel loadModelResource(Identifier identifier, ModelProviderContext modelProviderContext) {
-        if(OBJLoader.INSTANCE.isRegistered(identifier.getNamespace())) {
+    public UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
+        if(OBJ_LOADER.isRegistered (modelId.getNamespace()) && modelId.getVariant ().equals ("inventory")) {
             ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
 
-            Identifier modelPath = new Identifier (identifier.getNamespace (),
-                    "models/" + identifier.getPath () + ".obj-json");
+            Identifier modelPath = new Identifier (modelId.getNamespace (),
+                    "models/item/" + modelId.getPath () + ".json");
 
             try (Reader reader = new InputStreamReader(resourceManager.getResource(modelPath).getInputStream())) {
                 JsonObject rawModel = JsonHelper.deserialize (reader);
 
                 String objPath = rawModel.get ("parent").getAsString ();
                 if (! objPath.endsWith (".obj"))
-                    throw new IOException ("Parent of JsonOBJ model must be a .obj file.");
+                    throw new IllegalStateException ("Parent of JsonOBJ model must be a .obj file.");
 
                 Identifier parentPath = new Identifier (objPath);
 
@@ -57,13 +61,13 @@ public class JsonOBJLoader extends OBJLoader {
                     transformation = GSON.fromJson (rawTransform, ModelTransformation.class);
                 }
 
-                return (OBJUnbakedModel) OBJLoader.INSTANCE.loadModelResource (parentPath,
-                        modelProviderContext, transformation);
-            } catch (IOException e) {
-                // Silently ignore filenotfoundexceptions, as all models in a registered namespace would otherwise
-                // spew the console with errors
-                if (! (e instanceof FileNotFoundException)) {
-                    FOML.LOGGER.error("Unable to load OBJ Model, Source: " + identifier.toString(), e);
+                return (OBJUnbakedModel) OBJ_LOADER.loadModelResource (parentPath,
+                        context, transformation);
+            } catch (Exception e) {
+                // Silently ignore general IllegalStateExceptions, as all vanilla models in a registered namespace would
+                // otherwise spew the console with this error.
+                if (! (e instanceof IllegalStateException)) {
+                    FOML.LOGGER.error("Unable to load OBJ Model, Source: " + modelId.toString(), e);
                 }
             }
         }
@@ -81,5 +85,10 @@ public class JsonOBJLoader extends OBJLoader {
         protected TransformDeserializer () {
             super ();
         }
+    }
+
+    @Override
+    public ModelVariantProvider apply(ResourceManager manager) {
+        return this;
     }
 }

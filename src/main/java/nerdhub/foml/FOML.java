@@ -14,6 +14,6 @@ public class FOML implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(OBJLoader.INSTANCE);
-        ModelLoadingRegistry.INSTANCE.registerResourceProvider(JsonOBJLoader.INSTANCE);
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(JsonOBJLoader.INSTANCE);
     }
 }
