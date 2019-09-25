@@ -66,10 +66,6 @@ public class JsonOBJLoader extends OBJLoader {
                     FOML.LOGGER.error("Unable to load OBJ Model, Source: " + identifier.toString(), e);
                 }
             }
-
-            if (identifier.getPath ().endsWith (".obj-json")) {
-                System.out.println ("Test 2");
-            }
         }
         return null;
     }
