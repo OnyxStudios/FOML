@@ -18,23 +18,21 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.function.Function;
 
 /***
- *  JsonOBJLoader
+ *  ItemOBJLoader
  *  Child class of the OBJ loader that loads basic item OBJ models with JSON model transformations.
  *
  *  Created by jard at 2:27 AM on September 22, 2019.
  ***/
-public class JsonOBJLoader implements ModelVariantProvider, Function<ResourceManager, ModelVariantProvider> {
-    public static JsonOBJLoader INSTANCE = new JsonOBJLoader ();
+public class ItemOBJLoader implements ModelVariantProvider, Function<ResourceManager, ModelVariantProvider> {
+    public static ItemOBJLoader INSTANCE = new ItemOBJLoader();
     public static final Gson GSON = (new GsonBuilder())
-            .registerTypeAdapter (ModelTransformation.class, new JsonOBJLoader.ModelTransformDeserializer())
-            .registerTypeAdapter (Transformation.class, new JsonOBJLoader.TransformDeserializer())
+            .registerTypeAdapter (ModelTransformation.class, new ItemOBJLoader.ModelTransformDeserializer())
+            .registerTypeAdapter (Transformation.class, new ItemOBJLoader.TransformDeserializer())
             .create ();
     private static final OBJLoader OBJ_LOADER = OBJLoader.INSTANCE;
 

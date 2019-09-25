@@ -1,6 +1,6 @@
 package nerdhub.foml;
 
-import nerdhub.foml.obj.JsonOBJLoader;
+import nerdhub.foml.obj.ItemOBJLoader;
 import nerdhub.foml.obj.OBJLoader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
@@ -14,6 +14,6 @@ public class FOML implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(OBJLoader.INSTANCE);
-        ModelLoadingRegistry.INSTANCE.registerVariantProvider(JsonOBJLoader.INSTANCE);
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(ItemOBJLoader.INSTANCE);
     }
 }
