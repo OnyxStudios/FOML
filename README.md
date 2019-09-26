@@ -62,3 +62,44 @@ map_Kd MODID:blocks/test
 ```
 
 And that's basically it, your block show now render your OBJ model! **(Note: It is recommended to scale the model before exporting it due to the size it will be rendered as)**
+
+
+### Using OBJ models for items
+
+JSON-formatted vanilla item models placed in the `models/item` folder can also specify your OBJ model as its "parent" model, similar to blockstates:
+
+```
+{
+    "parent": "MODID:item/test.obj",
+    "display": {
+        "head": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "firstperson_righthand": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "firstperson_lefthand": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "gui": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        },
+        "fixed": {
+            "rotation": [0, 0, 0],
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1]
+        }
+    }
+}
+```
+And your item should now render the OBJ model with the proper transformations specified in its model file.
+
+So far, only vanilla model transformations are supported by FOML.

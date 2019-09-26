@@ -5,6 +5,7 @@ import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.util.Identifier;
 
@@ -12,11 +13,16 @@ import java.util.*;
 import java.util.function.Function;
 
 public class OBJUnbakedModel implements UnbakedModel {
+    protected OBJBuilder builder;
+    protected ModelTransformation transform;
 
-    private OBJBuilder builder;
+    public OBJUnbakedModel(OBJBuilder builder, ModelTransformation transform) {
+        if (transform == null)
+            transform = ModelTransformation.NONE;
 
-    public OBJUnbakedModel(OBJBuilder builder) {
         this.builder = builder;
+        this.transform = transform;
+
     }
 
     @Override
@@ -34,6 +40,6 @@ public class OBJUnbakedModel implements UnbakedModel {
 
     @Override
     public BakedModel bake(ModelLoader var1, Function<Identifier, Sprite> var2, ModelBakeSettings var3) {
-        return new OBJBakedModel(builder);
+        return new OBJBakedModel(builder, transform);
     }
 }

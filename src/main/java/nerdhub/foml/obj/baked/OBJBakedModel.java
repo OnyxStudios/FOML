@@ -25,9 +25,11 @@ import java.util.function.Supplier;
 public class OBJBakedModel implements BakedModel, FabricBakedModel {
 
     private Mesh mesh;
+    private ModelTransformation transformation;
 
-    public OBJBakedModel(OBJBuilder builder) {
+    public OBJBakedModel(OBJBuilder builder, ModelTransformation transformation) {
         this.mesh = builder.build();
+        this.transformation = transformation;
     }
 
     @Override
@@ -72,7 +74,7 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
 
     @Override
     public ModelTransformation getTransformation() {
-        return ModelTransformation.NONE;
+        return transformation;
     }
 
     @Override
