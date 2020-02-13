@@ -12,21 +12,25 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class OBJBuilder {
 
-    public static final Sprite DEFAULT_SPRITE = MinecraftClient.getInstance().getSpriteAtlas().getSprite(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
+    public static final SpriteIdentifier DEFAULT_SPRITE = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEX, null);
 
     private MeshBuilder meshBuilder;
     private QuadEmitter quadEmitter;
 
     private final Obj obj;
     private final List<Mtl> mtlList;
+    private Function<SpriteIdentifier, Sprite> textureGetter;
 
     public OBJBuilder(Obj obj, List<Mtl> mtlList) {
         meshBuilder = RendererAccess.INSTANCE.getRenderer().meshBuilder();
@@ -64,12 +68,12 @@ public class OBJBuilder {
             Mtl mtl = findMtlForName(matName);
             FloatTuple diffuseColor = null;
             FloatTuple specularColor = null;
-            Sprite mtlSprite = DEFAULT_SPRITE;
+            Sprite mtlSprite = textureGetter.apply(DEFAULT_SPRITE);
 
             if(mtl != null) {
                 diffuseColor = mtl.getKd();
                 specularColor = mtl.getKs();
-                mtlSprite = getMtlSprite(mtl.getMapKd());
+                mtlSprite = getMtlSprite(new Identifier(mtl.getMapKd()));
             }
 
             for (int i = 0; i < matGroupObj.getNumFaces(); i++) {
@@ -114,7 +118,11 @@ public class OBJBuilder {
         return null;
     }
 
-    public Sprite getMtlSprite(String name) {
-        return MinecraftClient.getInstance().getSpriteAtlas().getSprite(name);
+    public Sprite getMtlSprite(Identifier name) {
+        return textureGetter.apply(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEX, name));
+    }
+
+    public void setTextureGetter(Function<SpriteIdentifier, Sprite> textureGetter) {
+        this.textureGetter = textureGetter;
     }
 }
