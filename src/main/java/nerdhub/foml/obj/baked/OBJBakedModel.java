@@ -16,7 +16,7 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.ExtendedBlockView;
+import net.minecraft.world.BlockRenderView;
 
 import java.util.List;
 import java.util.Random;
@@ -39,15 +39,15 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
     }
 
     @Override
-    public void emitBlockQuads(ExtendedBlockView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
-        if(mesh != null) {
+    public void emitBlockQuads(BlockRenderView blockRenderView, BlockState blockState, BlockPos blockPos, Supplier<Random> supplier, RenderContext context) {
+        if (mesh != null) {
             context.meshConsumer().accept(mesh);
         }
     }
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context) {
-        if(mesh != null) {
+        if (mesh != null) {
             context.meshConsumer().accept(mesh);
         }
     }
@@ -58,8 +58,13 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
     }
 
     @Override
-    public boolean hasDepthInGui() {
+    public boolean hasDepth() {
         return true;
+    }
+
+    @Override
+    public boolean isSideLit() {
+        return false;
     }
 
     @Override
@@ -69,7 +74,7 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
 
     @Override
     public Sprite getSprite() {
-        return MinecraftClient.getInstance().getSpriteAtlas().getSprite(SpriteAtlasTexture.BLOCK_ATLAS_TEX);
+        return MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEX).apply(null);
     }
 
     @Override
