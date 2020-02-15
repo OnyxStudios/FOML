@@ -1,0 +1,5 @@
+archivesBaseName = project.mod_name + '-test'
+
+dependencies {
+    compile project(':foml-mod')
+}

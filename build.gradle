@@ -1,96 +1,62 @@
 plugins {
-	id 'fabric-loom' version '0.2.6-SNAPSHOT'
-	id 'maven-publish'
+    id 'fabric-loom' version '0.2.6-SNAPSHOT' apply false
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+allprojects {
+    apply plugin: 'fabric-loom'
 
-group = project.mod_group
-archivesBaseName = project.mod_name
-version = project.mod_version
-minecraft {
+    // Java
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    // Project
+    group = project.mod_group
+    archivesBaseName = project.mod_name
+    version = project.mod_version
+
+    // Dependencies
+    dependencies {
+        minecraft "com.mojang:minecraft:${mc_version}"
+        mappings "net.fabricmc:yarn:${yarn_mappings}"
+        modCompile "net.fabricmc:fabric-loader:${loader_version}"
+        modCompile "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    }
 }
 
-repositories {
-	jcenter()
-	maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
-}
+subprojects {
+    afterEvaluate {
+        jar {
+            from "LICENSE.md"
+            manifest {
+                attributes([
+                        "Implementation-Title": project.name,
+                        "Implementation-Version": project.version,
+                        "Maven-Artifact": "${project.group}:${project.archivesBaseName}:${project.version}".toLowerCase(Locale.ROOT),
+                        "Built-On-Minecraft": "${mc_version}",
+                        "Built-On-Java": "${System.getProperty("java.vm.version")} (${System.getProperty("java.vm.vendor")})"
+                ])
+            }
+        }
 
-dependencies {
-	minecraft "com.mojang:minecraft:${mc_version}"
-	mappings "net.fabricmc:yarn:${yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${loader_version}"
-	modCompile "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
-	modCompile "de.javagl:obj:${javagl_version}"
-	include "de.javagl:obj:${javagl_version}"
-}
+        // Resource processing
+        processResources {
+            inputs.property 'archivesBaseName', project.archivesBaseName
+            inputs.property 'version', project.version
 
-jar {
-	from "LICENSE.md"
-	manifest.mainAttributes(
-			"Implementation-Title": project.name,
-			"Implementation-Version": project.version,
-			"Maven-Artifact": "${project.group}:${project.archivesBaseName}:${project.version}".toLowerCase(Locale.ROOT),
-			"Built-On-Minecraft": "${mc_version}",
-			"Built-On-Java": "${System.getProperty("java.vm.version")} (${System.getProperty("java.vm.vendor")})"
-	)
-}
+            from(sourceSets.main.resources.srcDirs) {
+                include 'fabric.mod.json'
+                expand 'modid': project.archivesBaseName,
+                        'version': project.version
+            }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-	from sourceSets.main.allSource
-	classifier = 'sources'
+            from(sourceSets.main.resources.srcDirs) {
+                exclude 'fabric.mod.json'
+            }
+        }
+    }
 }
-
-artifacts {
-	archives sourcesJar
-}
-
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			afterEvaluate {
-				artifact(remapJar) {
-					builtBy remapJar
-				}
-			}
-			artifact sourcesJar
-			pom {
-				name = "FOML"
-				url = "https://github.com/NerdHubMC/FOML"
-				licenses {
-					license {
-						name = "MIT License"
-						url = "https://github.com/NerdHubMC/FOML/blob/master/LICENSE.md"
-					}
-				}
-				scm {
-					url = "https://github.com/NerdHubMC/FOML"
-					connection = "scm:git:git://github.com/NerdHubMC/FOML.git"
-					developerConnection = "scm:git:git@github.com:NerdHubMC/FOML.git"
-				}
-				issueManagement {
-					system = "github"
-					url = "https://github.com/NerdHubMC/FOML/issues"
-				}
-			}
-		}
-	}
-
-	repositories {
-		if (project.hasProperty("maven_user") && project.hasProperty("maven_pass")) {
-			maven {
-				name = "Abused's Maven"
-				url = findProperty("maven_url")
-				credentials {
-					username = findProperty("maven_user")
-					password = findProperty("maven_pass")
-				}
-				authentication {
-					basic(BasicAuthentication)
-				}
-			}
-		}
-	}
-}
-tasks.publish.dependsOn build

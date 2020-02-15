@@ -1,0 +1,73 @@
+plugins {
+    id 'maven-publish'
+}
+
+repositories {
+    jcenter()
+    maven { url = "https://oss.sonatype.org/content/repositories/releases/" }
+}
+
+dependencies {
+    modCompile "de.javagl:obj:${javagl_version}"
+    include "de.javagl:obj:${javagl_version}"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'FOML'
+
+            afterEvaluate {
+                artifact(remapJar) {
+                    builtBy remapJar
+                }
+            }
+            artifact sourcesJar
+            pom {
+                name = "FOML"
+                url = "https://github.com/NerdHubMC/FOML"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "https://github.com/NerdHubMC/FOML/blob/master/LICENSE.md"
+                    }
+                }
+                scm {
+                    url = "https://github.com/NerdHubMC/FOML"
+                    connection = "scm:git:git://github.com/NerdHubMC/FOML.git"
+                    developerConnection = "scm:git:git@github.com:NerdHubMC/FOML.git"
+                }
+                issueManagement {
+                    system = "github"
+                    url = "https://github.com/NerdHubMC/FOML/issues"
+                }
+            }
+        }
+    }
+
+    repositories {
+        if (project.hasProperty("maven_user") && project.hasProperty("maven_pass")) {
+            maven {
+                name = "Abused's Maven"
+                url = findProperty("maven_url")
+                credentials {
+                    username = findProperty("maven_user")
+                    password = findProperty("maven_pass")
+                }
+                authentication {
+                    basic(BasicAuthentication)
+                }
+            }
+        }
+    }
+}
+tasks.publish.dependsOn build

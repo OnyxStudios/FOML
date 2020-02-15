@@ -8,3 +8,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+rootProject.name = 'foml-root'
+
+include 'foml-mod', 'foml-test'
