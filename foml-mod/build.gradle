@@ -34,21 +34,21 @@ publishing {
             artifact sourcesJar
             pom {
                 name = "FOML"
-                url = "https://github.com/NerdHubMC/FOML"
+                url = "https://github.com/OnyxStudios/FOML"
                 licenses {
                     license {
                         name = "MIT License"
-                        url = "https://github.com/NerdHubMC/FOML/blob/master/LICENSE.md"
+                        url = "https://github.com/OnyxStudios/FOML/blob/master/LICENSE.md"
                     }
                 }
                 scm {
-                    url = "https://github.com/NerdHubMC/FOML"
-                    connection = "scm:git:git://github.com/NerdHubMC/FOML.git"
-                    developerConnection = "scm:git:git@github.com:NerdHubMC/FOML.git"
+                    url = "https://github.com/OnyxStudios/FOML"
+                    connection = "scm:git:git://github.com/OnyxStudios/FOML.git"
+                    developerConnection = "scm:git:git@github.com:OnyxStudios/FOML.git"
                 }
                 issueManagement {
                     system = "github"
-                    url = "https://github.com/NerdHubMC/FOML/issues"
+                    url = "https://github.com/OnyxStudios/FOML/issues"
                 }
             }
         }

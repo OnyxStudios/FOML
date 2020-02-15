@@ -6,20 +6,20 @@
 ```
 repositories {
     maven {
-        name = "NerdHubMC"
+        name = "OnyxStudios"
         url = "https://maven.abusedmaster.xyz"
     }
 }
 
 dependencies {
-    modCompile "com.github.NerdHubMC:FOML:${foml_version}"
+    modCompile "com.github.OnyxStudios:FOML:${foml_version}"
     
     // Includes FOML as a Jar in Jar dependency, Optional
-    include "com.github.NerdHubMC:FOML:${foml_version}"
+    include "com.github.OnyxStudios:FOML:${foml_version}"
 }
 ```
 
-You can find current releases over at the [maven](https://maven.abusedmaster.xyz/com/github/NerdHubMC/FOML/)
+You can find current releases over at the [maven](https://maven.abusedmaster.xyz/com/github/OnyxStudios/FOML/)
 
 # How to use
 Getting started with FOML is very simple and easy to do.
