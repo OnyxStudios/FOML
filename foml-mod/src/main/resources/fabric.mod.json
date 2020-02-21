@@ -16,7 +16,7 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "nerdhub.foml.FOML"
+      "com.github.onyxstudios.foml.FOML"
     ]
   },
   "depends": {

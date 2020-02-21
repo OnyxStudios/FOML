@@ -1,6 +1,6 @@
-package nerdhub.foml.obj.baked;
+package com.github.onyxstudios.foml.obj.baked;
 
-import nerdhub.foml.obj.OBJBuilder;
+import com.github.onyxstudios.foml.obj.OBJBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;

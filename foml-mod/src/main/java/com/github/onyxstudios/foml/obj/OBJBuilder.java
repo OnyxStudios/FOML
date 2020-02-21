@@ -1,4 +1,4 @@
-package nerdhub.foml.obj;
+package com.github.onyxstudios.foml.obj;
 
 import de.javagl.obj.FloatTuple;
 import de.javagl.obj.Mtl;

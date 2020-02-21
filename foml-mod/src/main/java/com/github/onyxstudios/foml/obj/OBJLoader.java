@@ -1,8 +1,8 @@
-package nerdhub.foml.obj;
+package com.github.onyxstudios.foml.obj;
 
+import com.github.onyxstudios.foml.obj.baked.OBJUnbakedModel;
 import de.javagl.obj.*;
-import nerdhub.foml.FOML;
-import nerdhub.foml.obj.baked.OBJUnbakedModel;
+import com.github.onyxstudios.foml.FOML;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
 import net.minecraft.client.MinecraftClient;

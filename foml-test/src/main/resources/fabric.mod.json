@@ -15,11 +15,11 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "nerdhub.fomltest.FOMLTest"
+      "com.github.onyxstudios.fomltest.FOMLTest"
     ]
   },
   "depends": {
-    "fabricloader": ">=0.4.0",
+    "fabricloader": ">=0.7.0",
     "fabric": "*"
   }
 }

@@ -1,7 +1,7 @@
-package nerdhub.foml.obj.baked;
+package com.github.onyxstudios.foml.obj.baked;
 
 import com.mojang.datafixers.util.Pair;
-import nerdhub.foml.obj.OBJBuilder;
+import com.github.onyxstudios.foml.obj.OBJBuilder;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.ModelLoader;

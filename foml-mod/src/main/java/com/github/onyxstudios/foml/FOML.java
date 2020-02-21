@@ -1,7 +1,7 @@
-package nerdhub.foml;
+package com.github.onyxstudios.foml;
 
-import nerdhub.foml.obj.ItemOBJLoader;
-import nerdhub.foml.obj.OBJLoader;
+import com.github.onyxstudios.foml.obj.ItemOBJLoader;
+import com.github.onyxstudios.foml.obj.OBJLoader;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import org.apache.logging.log4j.LogManager;

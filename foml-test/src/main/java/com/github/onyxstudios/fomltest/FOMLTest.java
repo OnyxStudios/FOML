@@ -1,6 +1,6 @@
-package nerdhub.fomltest;
+package com.github.onyxstudios.fomltest;
 
-import nerdhub.foml.obj.OBJLoader;
+import com.github.onyxstudios.foml.obj.OBJLoader;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Block;
