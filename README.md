@@ -3,7 +3,7 @@
 
 # Adding the API to your project
 
-```
+```groovy
 repositories {
     maven {
         name = "OnyxStudios"
@@ -28,13 +28,13 @@ Firstly you have to register your MODID as an OBJ Model handler, so that FOML wi
 
 ### **Example:**
 
-```
+```java
 OBJLoader.INSTANCE.registerDomain(MODID);
 ```
 
 After you register your domain, all you have to do is specify the OBJ model in the blockstate's file as such:
 
-```
+```json
 {
     "variants": {
         "": { "model": "testmod:block/test_model.obj" }
@@ -68,7 +68,7 @@ And that's basically it, your block show now render your OBJ model! **(Note: It 
 
 JSON-formatted vanilla item models placed in the `models/item` folder can also specify your OBJ model as its "parent" model, similar to blockstates:
 
-```
+```json
 {
     "parent": "MODID:item/test.obj",
     "display": {
@@ -103,3 +103,25 @@ JSON-formatted vanilla item models placed in the `models/item` folder can also s
 And your item should now render the OBJ model with the proper transformations specified in its model file.
 
 So far, only vanilla model transformations are supported by FOML.
+
+
+### Using obj models in other contexts
+
+First, register your models:
+```java
+public static final ModelIdenfier MODEL_IDENTIFIER = new ModelIdentifier(new Identifier(MODID, MODEL_PATH), null);
+
+OBJLoader.INSTANCE.registerDomain(MODID); // Once; register your models after this line
+ManualModelLoaderRegistry.INSTANCE.register(MODEL_IDENTIFIER);
+```
+
+Then use it in your renderers (example for an EntityModel):
+```java
+public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    MatrixStack.Entry entry = matrices.peek();
+    BakedModel model = Env.getClient().getBakedModelManager().getModel(MODEL_IDENTIFIER);
+    for (BakedQuad quad : model.getQuads(null, null, null)) {
+        vertexConsumer.quad(entry, quad, 1, 1, 1, 15, 0);
+    }
+}
+```
