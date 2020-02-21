@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "nerdhub.foml.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "ModelLoaderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
