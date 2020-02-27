@@ -9,13 +9,11 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +49,7 @@ public class OBJBuilder {
         if(obj.getNumTexCoords() > 0) {
             FloatTuple text = matGroup.getTexCoord(matGroup.getFace(faceIndex).getTexCoordIndex(textureCoordIndex));
 
-            quadEmitter.sprite(vertIndex, 0, text.getX(), text.getY());
+            quadEmitter.sprite(vertIndex, 0, text.getX(), 1 - text.getY());
         }else {
             quadEmitter.nominalFace(Direction.getFacing(normal.getX(), normal.getY(), normal.getZ()));
         }
