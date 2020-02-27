@@ -15,5 +15,6 @@ public class FOML implements ClientModInitializer {
     public void onInitializeClient() {
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(OBJLoader.INSTANCE);
         ModelLoadingRegistry.INSTANCE.registerVariantProvider(ItemOBJLoader.INSTANCE);
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider(r -> OBJLoader.INSTANCE::loadModelResource);
     }
 }

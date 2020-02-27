@@ -25,5 +25,8 @@
   },
   "custom": {
     "modmenu:api": true
-  }
+  },
+  "mixins": [
+    "foml.mixins.json"
+  ]
 }
