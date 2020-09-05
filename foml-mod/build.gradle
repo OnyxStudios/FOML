@@ -57,7 +57,7 @@ publishing {
     repositories {
         if (project.hasProperty("maven_user") && project.hasProperty("maven_pass")) {
             maven {
-                name = "Abused's Maven"
+                name = "OnyxMaven"
                 url = findProperty("maven_url")
                 credentials {
                     username = findProperty("maven_user")
