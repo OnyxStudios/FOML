@@ -1,10 +1,10 @@
-package nerdhub.foml.obj;
+package dev.onyxstudios.foml.obj;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import nerdhub.foml.FOML;
-import nerdhub.foml.obj.baked.OBJUnbakedModel;
+import dev.onyxstudios.foml.FOML;
+import dev.onyxstudios.foml.obj.baked.OBJUnbakedModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;

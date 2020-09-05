@@ -1,6 +1,6 @@
-package nerdhub.foml.obj.baked;
+package dev.onyxstudios.foml.obj.baked;
 
-import nerdhub.foml.obj.OBJBuilder;
+import dev.onyxstudios.foml.obj.OBJBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;
@@ -9,11 +9,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.render.model.json.ModelItemPropertyOverrideList;
+import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
@@ -74,7 +74,7 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
 
     @Override
     public Sprite getSprite() {
-        return MinecraftClient.getInstance().getSpriteAtlas(SpriteAtlasTexture.BLOCK_ATLAS_TEX).apply(null);
+        return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(null);
     }
 
     @Override
@@ -83,8 +83,8 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
     }
 
     @Override
-    public ModelItemPropertyOverrideList getItemPropertyOverrides() {
-        return ModelItemPropertyOverrideList.EMPTY;
+    public ModelOverrideList getOverrides() {
+        return ModelOverrideList.EMPTY;
     }
 
     @Override
