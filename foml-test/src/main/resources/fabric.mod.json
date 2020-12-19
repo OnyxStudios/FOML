@@ -16,6 +16,9 @@
   "entrypoints": {
     "main": [
       "nerdhub.fomltest.FOMLTest"
+    ],
+    "client": [
+      "nerdhub.fomltest.FOMLTest"
     ]
   },
   "depends": {

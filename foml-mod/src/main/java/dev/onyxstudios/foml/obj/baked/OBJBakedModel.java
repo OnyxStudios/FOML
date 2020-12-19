@@ -26,10 +26,12 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
 
     private Mesh mesh;
     private ModelTransformation transformation;
+    private final Sprite sprite;
 
-    public OBJBakedModel(OBJBuilder builder, ModelTransformation transformation) {
+    public OBJBakedModel(OBJBuilder builder, ModelTransformation transformation, Sprite sprite) {
         this.mesh = builder.build();
         this.transformation = transformation;
+        this.sprite = sprite;
     }
 
     @Override
@@ -74,7 +76,7 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
 
     @Override
     public Sprite getSprite() {
-        return MinecraftClient.getInstance().getSpriteAtlas(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).apply(null);
+        return this.sprite;
     }
 
     @Override

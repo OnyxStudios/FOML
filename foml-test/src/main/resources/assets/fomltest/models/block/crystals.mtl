@@ -1,6 +1,9 @@
 # Blender MTL File: 'crystals.blend'
 # Material Count: 1
 
+newmtl sprite
+map_Kd fomltest:block/crystal_base
+
 newmtl Crystal_Material
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000

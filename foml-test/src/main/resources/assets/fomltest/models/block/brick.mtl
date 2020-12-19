@@ -1,4 +1,8 @@
 # Rhino
+
+newmtl sprite
+map_Kd fomltest:block/brick
+
 newmtl Base
 Ka 0.0000 0.0000 0.0000
 Kd 1.0000 1.0000 1.0000
@@ -7,6 +11,7 @@ Tf 0.0000 0.0000 0.0000
 d 1.0000
 Ns 0.0000
 map_Kd fomltest:block/test
+
 newmtl anvil_base
 Ka 0.0000 0.0000 0.0000
 Kd 1.0000 1.0000 1.0000
@@ -15,6 +20,7 @@ Tf 0.0000 0.0000 0.0000
 d 1.0000
 Ns 0.0000
 map_Kd fomltest:block/anvil_base
+
 newmtl brick
 Ka 0.0000 0.0000 0.0000
 Kd 1.0000 1.0000 1.0000

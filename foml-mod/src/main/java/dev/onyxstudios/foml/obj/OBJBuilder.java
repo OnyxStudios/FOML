@@ -28,6 +28,7 @@ public class OBJBuilder {
 
     private final Obj obj;
     private final List<Mtl> mtlList;
+    private final SpriteIdentifier sprite;
     private Function<SpriteIdentifier, Sprite> textureGetter;
 
     public OBJBuilder(Obj obj, List<Mtl> mtlList) {
@@ -35,6 +36,12 @@ public class OBJBuilder {
         quadEmitter = meshBuilder.getEmitter();
         this.obj = obj;
         this.mtlList = mtlList;
+
+        Mtl mtl = this.findMtlForName("sprite");
+        this.sprite = mtlList.size() > 0
+                ? new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEX, new Identifier((mtl == null ? mtlList.get(0) : mtl).getMapKd()))
+                : DEFAULT_SPRITE;
+
     }
 
     private void addVertex (int faceIndex, int vertIndex, FloatTuple vertex, FloatTuple normal, QuadEmitter emitter,
@@ -122,5 +129,9 @@ public class OBJBuilder {
 
     public void setTextureGetter(Function<SpriteIdentifier, Sprite> textureGetter) {
         this.textureGetter = textureGetter;
+    }
+
+    public SpriteIdentifier getSprite() {
+        return this.sprite;
     }
 }
