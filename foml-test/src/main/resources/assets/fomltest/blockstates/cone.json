@@ -1,7 +1,7 @@
 {
     "multipart": [
         {
-            "apply": { "model": "minecraft:block/acacia_fence_post"}
+            "apply": { "model": "minecraft:block/iron_bars_post"}
         },
         {
             "when": { "facing": "north"},

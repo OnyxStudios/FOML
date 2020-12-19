@@ -1,14 +1,14 @@
 package dev.onyxstudios.foml.obj.baked;
 
-import dev.onyxstudios.foml.obj.OBJBuilder;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.color.block.BlockColorProvider;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
@@ -27,8 +27,8 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
     private final ModelTransformation transformation;
     private final Sprite sprite;
 
-    public OBJBakedModel(OBJBuilder builder, ModelTransformation transformation, Sprite sprite, ModelBakeSettings bakeSettings) {
-        this.mesh = builder.build(bakeSettings);
+    public OBJBakedModel(Mesh mesh, ModelTransformation transformation, Sprite sprite) {
+        this.mesh = mesh;
         this.transformation = transformation;
         this.sprite = sprite;
     }
@@ -42,7 +42,24 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
     @Override
     public void emitBlockQuads(BlockRenderView blockRenderView, BlockState blockState, BlockPos blockPos, Supplier<Random> supplier, RenderContext context) {
         if (mesh != null) {
-            context.meshConsumer().accept(mesh);
+            BlockColorProvider colorProvider = ColorProviderRegistry.BLOCK.get(blockState.getBlock());
+
+            if (colorProvider == null) {
+                context.meshConsumer().accept(mesh);
+            } else {
+                RenderContext.QuadTransform transform = mv -> {
+                    for (int i = 0; i < 3; ++i) {
+                        int t = mv.colorIndex();
+                        int x = 1;
+                    }
+
+                    return true;
+                };
+
+                context.pushTransform(transform);
+                context.meshConsumer().accept(mesh);
+                context.popTransform();
+            }
         }
     }
 

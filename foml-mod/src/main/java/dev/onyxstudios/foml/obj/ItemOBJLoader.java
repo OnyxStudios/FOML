@@ -38,7 +38,7 @@ public class ItemOBJLoader implements ModelVariantProvider, Function<ResourceMan
 
     @Override
     public UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
-        if(OBJ_LOADER.isRegistered (modelId.getNamespace()) && modelId.getVariant ().equals ("inventory")) {
+        if(modelId.getVariant().equals("inventory")) {
             ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
 
             Identifier modelPath = new Identifier (modelId.getNamespace (),
@@ -59,7 +59,7 @@ public class ItemOBJLoader implements ModelVariantProvider, Function<ResourceMan
                     transformation = GSON.fromJson (rawTransform, ModelTransformation.class);
                 }
 
-                return (OBJUnbakedModel) OBJ_LOADER.loadModelResource (parentPath,
+                return OBJ_LOADER.loadModelResource (parentPath,
                         context, transformation);
             } catch (Exception e) {
                 // Silently ignore general IllegalStateExceptions, as all vanilla models in a registered namespace would
