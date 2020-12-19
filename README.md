@@ -100,6 +100,14 @@ use_diffuse
 map_Kd MODID:blocks/test
 ```
 
+### Adding a sprite
+By default, FOML will use the first material defined in your .mtl file as the sprite for the block. If you would rather use something else, you can define a new material named `sprite`:
+
+```
+newmtl sprite
+map_Kd MODID:blocks/test
+```
+
 ### Using OBJ models for items
 
 JSON-formatted vanilla item models placed in the `models/item` folder can also specify your OBJ model as its "parent" model, similar to blockstates:
