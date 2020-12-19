@@ -12,10 +12,10 @@ repositories {
 }
 
 dependencies {
-    modCompile "com.github.OnyxStudios:FOML:${foml_version}"
+    modCompile "dev.onyxstudios:FOML:${foml_version}"
     
     // Includes FOML as a Jar in Jar dependency, Optional
-    include "com.github.OnyxStudios:FOML:${foml_version}"
+    include "dev.onyxstudios:FOML:${foml_version}"
 }
 ```
 
@@ -24,15 +24,7 @@ You can find current releases over at the [maven](https://maven.abusedmaster.xyz
 # How to use
 Getting started with FOML is very simple and easy to do.
 
-Firstly you have to register your MODID as an OBJ Model handler, so that FOML will know to load OBJ models under your mod's domain.
-
-### **Example:**
-
-```
-OBJLoader.INSTANCE.registerDomain(MODID);
-```
-
-After you register your domain, all you have to do is specify the OBJ model in the blockstate's file as such:
+All you have to do is specify the OBJ model in the blockstate's file as such:
 
 ```
 {
@@ -63,6 +55,50 @@ map_Kd MODID:blocks/test
 
 And that's basically it, your block show now render your OBJ model! **(Note: It is recommended to scale the model before exporting it due to the size it will be rendered as)**
 
+### Using tint indices
+To use a tint index, simply specify the index in your material definition like so:
+
+```
+#Example MTL File
+
+# This material will not be tinted
+newmtl Base
+Ka 0.0000 0.0000 0.0000
+Kd 1.0000 1.0000 1.0000
+Ks 1.0000 1.0000 1.0000
+Tf 0.0000 0.0000 0.0000
+d 1.0000
+Ns 0.0000
+map_Kd MODID:blocks/test
+
+# This material will be tinted
+newmtl Leaves
+Ka 0.0000 0.0000 0.0000
+Kd 1.0000 1.0000 1.0000
+Ks 1.0000 1.0000 1.0000
+Tf 0.0000 0.0000 0.0000
+d 1.0000
+Ns 0.0000
+tintindex 0
+map_Kd MODID:blocks/test
+```
+
+### Using diffuse colors
+Because many 3d modeling programs will have diffuse colors by default that aren't pure white, FOML will ignore the colors specified in your materials by default. You can override this to use your materials color with a simple flag:
+
+```
+#Example MTL File
+
+newmtl Base
+Ka 0.0000 0.0000 0.0000
+Kd 1.0000 1.0000 1.0000
+Ks 1.0000 1.0000 1.0000
+Tf 0.0000 0.0000 0.0000
+d 1.0000
+Ns 0.0000
+use_diffuse
+map_Kd MODID:blocks/test
+```
 
 ### Using OBJ models for items
 
