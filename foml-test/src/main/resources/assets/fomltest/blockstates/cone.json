@@ -1,0 +1,23 @@
+{
+    "multipart": [
+        {
+            "apply": { "model": "minecraft:block/acacia_fence_post"}
+        },
+        {
+            "when": { "facing": "north"},
+            "apply": { "model": "fomltest:block/cone.obj" }
+        },
+        {
+            "when": { "facing": "east"},
+            "apply": { "model": "fomltest:block/cone.obj", "y": 90 }
+        },
+        {
+            "when": { "facing": "south"},
+            "apply": { "model": "fomltest:block/cone.obj", "y": 180 }
+        },
+        {
+            "when": { "facing": "west"},
+            "apply": { "model": "fomltest:block/cone.obj", "y": 270 }
+        }
+    ]
+}

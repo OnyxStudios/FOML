@@ -6,14 +6,13 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.render.model.ModelBakeSettings;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
@@ -24,12 +23,12 @@ import java.util.function.Supplier;
 
 public class OBJBakedModel implements BakedModel, FabricBakedModel {
 
-    private Mesh mesh;
-    private ModelTransformation transformation;
+    private final Mesh mesh;
+    private final ModelTransformation transformation;
     private final Sprite sprite;
 
-    public OBJBakedModel(OBJBuilder builder, ModelTransformation transformation, Sprite sprite) {
-        this.mesh = builder.build();
+    public OBJBakedModel(OBJBuilder builder, ModelTransformation transformation, Sprite sprite, ModelBakeSettings bakeSettings) {
+        this.mesh = builder.build(bakeSettings);
         this.transformation = transformation;
         this.sprite = sprite;
     }

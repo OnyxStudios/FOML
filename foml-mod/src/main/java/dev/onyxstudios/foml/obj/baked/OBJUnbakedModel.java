@@ -44,6 +44,6 @@ public class OBJUnbakedModel implements UnbakedModel {
     @Override
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId) {
         builder.setTextureGetter(textureGetter);
-        return new OBJBakedModel(builder, transform, textureGetter.apply(builder.getSprite()));
+        return new OBJBakedModel(builder, transform, textureGetter.apply(builder.getSprite()), rotationContainer);
     }
 }
