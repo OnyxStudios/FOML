@@ -42,24 +42,7 @@ public class OBJBakedModel implements BakedModel, FabricBakedModel {
     @Override
     public void emitBlockQuads(BlockRenderView blockRenderView, BlockState blockState, BlockPos blockPos, Supplier<Random> supplier, RenderContext context) {
         if (mesh != null) {
-            BlockColorProvider colorProvider = ColorProviderRegistry.BLOCK.get(blockState.getBlock());
-
-            if (colorProvider == null) {
-                context.meshConsumer().accept(mesh);
-            } else {
-                RenderContext.QuadTransform transform = mv -> {
-                    for (int i = 0; i < 3; ++i) {
-                        int t = mv.colorIndex();
-                        int x = 1;
-                    }
-
-                    return true;
-                };
-
-                context.pushTransform(transform);
-                context.meshConsumer().accept(mesh);
-                context.popTransform();
-            }
+            context.meshConsumer().accept(mesh);
         }
     }
 
