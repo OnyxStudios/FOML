@@ -120,6 +120,7 @@ public class OBJUnbakedModel implements UnbakedModel {
                     emitter.spriteColor(0, color, color, color, color);
                     emitter.material(RendererAccess.INSTANCE.getRenderer().materialFinder().find());
                     emitter.colorIndex(mtl.getTintIndex());
+                    emitter.nominalFace(emitter.lightFace());
                     emitter.spriteBake(0, mtlSprite, MutableQuadView.BAKE_NORMALIZED | (bakeSettings.isShaded() ? MutableQuadView.BAKE_LOCK_UV : 0));
 
                     emitter.emit();

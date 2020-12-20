@@ -9,15 +9,15 @@
         },
         {
             "when": { "facing": "east"},
-            "apply": { "model": "fomltest:block/cone.obj", "y": 90 }
+            "apply": { "model": "fomltest:block/cone.obj", "y": 90, "uvlock": true }
         },
         {
             "when": { "facing": "south"},
-            "apply": { "model": "fomltest:block/cone.obj", "y": 180 }
+            "apply": { "model": "fomltest:block/cone.obj", "y": 180, "uvlock": true }
         },
         {
             "when": { "facing": "west"},
-            "apply": { "model": "fomltest:block/cone.obj", "y": 270 }
+            "apply": { "model": "fomltest:block/cone.obj", "y": 270, "uvlock": true }
         }
     ]
 }
