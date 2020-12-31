@@ -1,10 +1,7 @@
 package dev.onyxstudios.foml.obj;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import dev.onyxstudios.foml.FOML;
-import dev.onyxstudios.foml.obj.baked.OBJUnbakedModel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
@@ -38,34 +35,39 @@ public class ItemOBJLoader implements ModelVariantProvider, Function<ResourceMan
 
     @Override
     public UnbakedModel loadModelVariant(ModelIdentifier modelId, ModelProviderContext context) {
-        if(OBJ_LOADER.isRegistered (modelId.getNamespace()) && modelId.getVariant ().equals ("inventory")) {
+        if(modelId.getVariant().equals("inventory")) {
             ResourceManager resourceManager = MinecraftClient.getInstance().getResourceManager();
 
             Identifier modelPath = new Identifier (modelId.getNamespace (),
                     "models/item/" + modelId.getPath () + ".json");
 
-            try (Reader reader = new InputStreamReader(resourceManager.getResource(modelPath).getInputStream())) {
-                JsonObject rawModel = JsonHelper.deserialize (reader);
+            if (resourceManager.containsResource(modelPath)) {
+                try (Reader reader = new InputStreamReader(resourceManager.getResource(modelPath).getInputStream())) {
+                    JsonObject rawModel = JsonHelper.deserialize(reader);
 
-                String objPath = rawModel.get ("parent").getAsString ();
-                if (! objPath.endsWith (".obj"))
-                    throw new IllegalStateException ("Parent of JsonOBJ model must be a .obj file.");
+                    JsonElement parent = rawModel.get("parent");
+                    if (parent instanceof JsonPrimitive && ((JsonPrimitive) parent).isString()) {
+                        String objPath = parent.getAsString();
+                        if (!objPath.endsWith(".obj"))
+                            throw new IllegalStateException("Parent of JsonOBJ model must be a .obj file.");
 
-                Identifier parentPath = new Identifier (objPath);
+                        Identifier parentPath = new Identifier(objPath);
 
-                ModelTransformation transformation = null;
-                if (rawModel.has ("display")) {
-                    JsonObject rawTransform = JsonHelper.getObject (rawModel, "display");
-                    transformation = GSON.fromJson (rawTransform, ModelTransformation.class);
-                }
+                        ModelTransformation transformation = null;
+                        if (rawModel.has("display")) {
+                            JsonObject rawTransform = JsonHelper.getObject(rawModel, "display");
+                            transformation = GSON.fromJson(rawTransform, ModelTransformation.class);
+                        }
 
-                return (OBJUnbakedModel) OBJ_LOADER.loadModelResource (parentPath,
-                        context, transformation);
-            } catch (Exception e) {
-                // Silently ignore general IllegalStateExceptions, as all vanilla models in a registered namespace would
-                // otherwise spew the console with this error.
-                if (! (e instanceof IllegalStateException)) {
-                    FOML.LOGGER.error("Unable to load OBJ Model, Source: " + modelId.toString(), e);
+                        return OBJ_LOADER.loadModelResource(parentPath,
+                                context, transformation);
+                    }
+                } catch (Exception e) {
+                    // Silently ignore general IllegalStateExceptions, as all vanilla models in a registered namespace would
+                    // otherwise spew the console with this error.
+                    if (!(e instanceof IllegalStateException)) {
+                        FOML.LOGGER.error("Unable to load OBJ Model, Source: " + modelId.toString(), e);
+                    }
                 }
             }
         }
